@@ -1,3 +1,19 @@
+/*
+ * Copyright 2025-present the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package plus.wcj.crc;
 
 
@@ -11,15 +27,15 @@ public class CrcTest {
 
     @Test
     public void test() {
-        CRCAlgorithm crcAlgorithm = CRCModel.CRC_3_GSM.getCrcAlgorithm();
-        System.out.println(CRCUtils.bytesToHex(crcAlgorithm.array("1234567890".getBytes())));
-        System.out.println(CRCUtils.bytesToHex(crcAlgorithm.array("1234567890".getBytes(), false)));
+        CRC crc = CRCModel.CRC_3_GSM.getCrc();
+        System.out.println(CRCUtils.bytesToHex(crc.array("1234567890".getBytes())));
+        System.out.println(CRCUtils.bytesToHex(crc.array("1234567890".getBytes(), false)));
     }
 
     @Test
     public void check() {
         for (CRCModel crcModel : CRCModel.values()) {
-            byte[] bytes = crcModel.getCrcAlgorithm().array(CRCModel.checkInput.getBytes());
+            byte[] bytes = crcModel.getCrc().array(CRCModel.checkInput.getBytes());
             String crc = CRCUtils.bytesToHex(bytes);
             String check = CRCUtils.bytesToHex(CRCUtils.hexToBytes(crcModel.getCheck()));
             if (!check.equalsIgnoreCase(crc)) {
