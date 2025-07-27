@@ -15,9 +15,14 @@
 
 ```java
     public static void main(String[] args) {
-        CRC  crc = CRCModel.CRC_16_ARC.getCrc();
-        System.out.println(Arrays.toString(crc.array("1234567890".getBytes())));
-        System.out.println(crc.hex("1234567890".getBytes()));
+        byte[] data = "1234567890".getBytes();
+        for (CRCModel crcModel : CRCModel.values()) {
+            CRC crc = crcModel.getCrc();
+            String names = Arrays.toString(crcModel.getNames());
+    
+            System.out.println(names + " checkSum: " + Arrays.toString(crc.array(data)));
+            System.out.println(names + " checkSum: " + crc.hex(data));
+        }
     }
 ```
 

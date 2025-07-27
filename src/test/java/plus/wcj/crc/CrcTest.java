@@ -19,9 +19,10 @@ package plus.wcj.crc;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 /**
  * @author ChangJin Wei (魏昌进)
- *
  */
 public class CrcTest {
 
@@ -45,6 +46,17 @@ public class CrcTest {
         }
     }
 
+    @Test
+    public void example() {
+        byte[] data = "1234567890".getBytes();
+        for (CRCModel crcModel : CRCModel.values()) {
+            CRC crc = crcModel.getCrc();
+            String names = Arrays.toString(crcModel.getNames());
+
+            System.out.println(names + " checkSum: " + Arrays.toString(crc.array(data)));
+            System.out.println(names + " checkSum: " + crc.hex(data));
+        }
+    }
 
 
 }
