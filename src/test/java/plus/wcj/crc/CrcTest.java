@@ -29,8 +29,8 @@ public class CrcTest {
     @Test
     public void test() {
         CRC crc = CRCModel.CRC_3_GSM.getCrc();
-        System.out.println(CRCUtils.bytesToHex(crc.array("1234567890".getBytes())));
-        System.out.println(CRCUtils.bytesToHex(crc.array("1234567890".getBytes(), false)));
+        System.out.println(CRCUtils.bytesToHex(crc.array("1234567890")));
+        System.out.println(CRCUtils.bytesToHex(crc.array("1234567890", false)));
     }
 
     @Test
@@ -48,7 +48,7 @@ public class CrcTest {
 
     @Test
     public void example() {
-        byte[] data = "1234567890".getBytes();
+        String data = "1234567890";
         for (CRCModel crcModel : CRCModel.values()) {
             CRC crc = crcModel.getCrc();
             String names = Arrays.toString(crcModel.getNames());

@@ -43,6 +43,22 @@ public interface CRC<T> {
         return array(data, ignoreTailBytes, true);
     }
 
+    default byte[] array(String data) {
+        return array(data.getBytes(), 0, true);
+    }
+
+    default byte[] array(String data, boolean bigEndian) {
+        return array(data, 0, bigEndian);
+    }
+
+    default byte[] array(String data, int ignoreTailBytes) {
+        return array(data, ignoreTailBytes, true);
+    }
+
+    default byte[] array(String data, int ignoreTailBytes, boolean bigEndian){
+        return array(data.getBytes(), ignoreTailBytes, bigEndian);
+    }
+
 
     default String hex(byte[] data) {
         return hex(data, 0, true);
@@ -57,6 +73,22 @@ public interface CRC<T> {
     }
 
     default String hex(byte[] data, int ignoreTailBytes, boolean bigEndian) {
+        return CRCUtils.bytesToHex(array(data, ignoreTailBytes, bigEndian));
+    }
+
+    default String hex(String data) {
+        return hex(data, 0, true);
+    }
+
+    default String hex(String data, boolean bigEndian) {
+        return hex(data, 0, bigEndian);
+    }
+
+    default String hex(String data, int ignoreTailBytes) {
+        return hex(data, ignoreTailBytes, true);
+    }
+
+    default String hex(String data, int ignoreTailBytes, boolean bigEndian) {
         return CRCUtils.bytesToHex(array(data, ignoreTailBytes, bigEndian));
     }
 
