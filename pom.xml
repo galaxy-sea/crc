@@ -21,7 +21,7 @@
 
     <groupId>plus.wcj.crc</groupId>
     <artifactId>crc</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <name>crc</name>
     <description>All CRC algorithms</description>
 
