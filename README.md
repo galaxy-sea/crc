@@ -1,5 +1,5 @@
 
-Supports 200+ standard CRC (Cyclic Redundancy Check) algorithms, covering bit widths from CRC-3 to CRC-82. Suitable for industrial communication, embedded development, file transmission, and other scenarios.
+Supports 200+ standard CRC (Cyclic Redundancy Check) algorithms in Java, covering bit widths from CRC-3 to CRC-82. Suitable for industrial communication, embedded development, file transmission, and other scenarios.
 
 Feel free to Star, Fork, or submit Issues to contribute and improve the project!
 
