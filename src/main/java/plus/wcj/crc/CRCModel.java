@@ -168,16 +168,16 @@ public enum CRCModel {
     CRC_32_XFER(new StandardCRC(32, 0xafL, 0x0L, false, false, 0x0L), "BD0BE338", "CRC-32/XFER", "XFER"),
 
     // CRC 40
-    CRC_40_GSM(new BigCRC(40, "4820009", "0", false, false, "ffffffffff"), "D4164FC646", "CRC-40/GSM"),
+    CRC_40_GSM(new StandardCRC(40, 0x4820009L, 0x0L, false, false, 0xffffffffffL), "D4164FC646", "CRC-40/GSM"),
 
     // CRC 64
-    CRC_64_ECMA_182(new BigCRC(64, "42f0e1eba9ea3693", "0", false, false, "0"), "6C40DF5F0B497347", "CRC-64/ECMA-182", "CRC-64"),
-    CRC_64_GO_ISO(new BigCRC(64, "1b", "ffffffffffffffff", true, true, "ffffffffffffffff"), "B90956C775A41001", "CRC-64/GO-ISO"),
-    CRC_64_MS(new BigCRC(64, "259c84cba6426349", "ffffffffffffffff", true, true, "0"), "75D4B74F024ECEEA", "CRC-64/MS"),
-    CRC_64_NVME(new BigCRC(64, "ad93d23594c93659", "ffffffffffffffff", true, true, "ffffffffffffffff"), "AE8B14860A799888", "CRC-64/NVME"),
-    CRC_64_REDIS(new BigCRC(64, "ad93d23594c935a9", "0", true, true, "0"), "E9C6D914C4B8D9CA", "CRC-64/REDIS"),
-    CRC_64_WE(new BigCRC(64, "42f0e1eba9ea3693", "ffffffffffffffff", false, false, "ffffffffffffffff"), "62EC59E3F1A4F00A", "CRC-64/WE"),
-    CRC_64_XZ(new BigCRC(64, "42f0e1eba9ea3693", "ffffffffffffffff", true, true, "ffffffffffffffff"), "995DC9BBDF1939FA", "CRC-64/XZ", "CRC-64/GO-ECMA"),
+    CRC_64_ECMA_182(new StandardCRC(64, 0x42f0e1eba9ea3693L, 0x0L, false, false, 0x0L), "6C40DF5F0B497347", "CRC-64/ECMA-182", "CRC-64"),
+    CRC_64_GO_ISO(new StandardCRC(64, 0x1bL, 0xffffffffffffffffL, true, true, 0xffffffffffffffffL), "B90956C775A41001", "CRC-64/GO-ISO"),
+    CRC_64_MS(new StandardCRC(64, 0x259c84cba6426349L, 0xffffffffffffffffL, true, true, 0x0L), "75D4B74F024ECEEA", "CRC-64/MS"),
+    CRC_64_NVME(new StandardCRC(64, 0xad93d23594c93659L, 0xffffffffffffffffL, true, true, 0xffffffffffffffffL), "AE8B14860A799888", "CRC-64/NVME"),
+    CRC_64_REDIS(new StandardCRC(64, 0xad93d23594c935a9L, 0x0L, true, true, 0x0L), "E9C6D914C4B8D9CA", "CRC-64/REDIS"),
+    CRC_64_WE(new StandardCRC(64, 0x42f0e1eba9ea3693L, 0xffffffffffffffffL, false, false, 0xffffffffffffffffL), "62EC59E3F1A4F00A", "CRC-64/WE"),
+    CRC_64_XZ(new StandardCRC(64, 0x42f0e1eba9ea3693L, 0xffffffffffffffffL, true, true, 0xffffffffffffffffL), "995DC9BBDF1939FA", "CRC-64/XZ", "CRC-64/GO-ECMA"),
 
     // CRC 82
     CRC_82_DARC(new BigCRC(82, "308c0111011401440411", "0", true, true, "0"), "09EA83F625023801FD612", "CRC-82/DARC"),

@@ -49,7 +49,24 @@ public final class CRCUtils {
         return data;
     }
 
+    public static BigInteger reverseBits(BigInteger value, int width) {
+        BigInteger result = BigInteger.ZERO;
+        for (int i = 0; i < width; i++) {
+            if (value.testBit(i)) {
+                result = result.setBit(width - 1 - i);
+            }
+        }
+        return result;
+    }
 
+
+    /**
+     * {@link java.lang.Integer#reverse(int)}
+     *
+     * @param value
+     * @param width
+     * @return
+     */
     public static int reverseBits(int value, int width) {
         int result = 0;
         for (int i = 0; i < width; i++) {
@@ -60,17 +77,13 @@ public final class CRCUtils {
         return result;
     }
 
-    public static BigInteger reverseBits(BigInteger input, int width) {
-        BigInteger result = BigInteger.ZERO;
-        for (int i = 0; i < width; i++) {
-            if (input.testBit(i)) {
-                result = result.setBit(width - 1 - i);
-            }
-        }
-        return result;
-    }
-
-
+    /**
+     * {@link java.lang.Integer#reverse(int)}
+     * @param value
+     * @param width
+     * @return
+     */
+    @Deprecated
     public static long reverseBits(long value, int width) {
         long result = 0;
         for (int i = 0; i < width; i++) {

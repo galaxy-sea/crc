@@ -22,12 +22,17 @@ package plus.wcj.crc;
 public class NoOpCRC implements CRC<Long> {
 
     @Override
-    public Long calculate(byte[] data, int ignoreTailBytes) {
+    public Long calculate(byte[] data, int offset, int length) {
         return 0L;
     }
 
     @Override
-    public byte[] array(byte[] data, int ignoreTailBytes, boolean bigEndian) {
+    public int getCrcByteLength() {
+        return 0;
+    }
+
+    @Override
+    public byte[] array(byte[] data, int offset, int length, boolean bigEndian) {
         return new byte[0];
     }
 

@@ -16,9 +16,12 @@
 
 package plus.wcj.crc;
 
+import lombok.Getter;
+
 /**
  * @author ChangJin Wei (魏昌进)
  */
+@Getter
 public class StandardCRC implements CRC<Long> {
 
     public final int width, crcByteLength;
@@ -34,42 +37,41 @@ public class StandardCRC implements CRC<Long> {
 
         this.poly = poly;
         this.init = init;
-        this.refin = refin;
         this.refout = refout;
+        this.mask = -1L >>> (64 - width);
+
+        this.refin = refin;
         this.xorout = xorout;
-        this.mask = (1L << width) - 1;
     }
 
     @Override
-    public Long calculate(byte[] data, int ignoreTailBytes) {
+    public Long calculate(byte[] data, int offset, int length) {
         long crc = init;
-        int limit = data.length - ignoreTailBytes;
-        for (int i = 0; i < limit - ignoreTailBytes; i++) {
+        for (int i = 0; i < data.length; i++) {
             int value = data[i] & 0xFF;
             if (refin) {
-                value = CRCUtils.reverseBits(value, 8);
+                value = Integer.reverse(value) >>> (32 - 8);
             }
             for (int j = 0; j < 8; j++) {
-                boolean bit = ((value >> (7 - j)) & 1) != 0;
+                boolean inputBit = ((value >> (7 - j)) & 1) != 0;
                 boolean topBit = ((crc >> (width - 1)) & 1) != 0;
                 crc = ((crc << 1) & mask);
-                if (topBit ^ bit) {
+                if (topBit ^ inputBit) {
                     crc ^= poly;
                 }
             }
         }
         if (refout) {
-            crc = CRCUtils.reverseBits(crc, width);
+            crc = Long.reverse(crc) >>> (64 - width);
         }
         crc = (crc ^ xorout) & mask;
         return crc;
     }
 
 
-
     @Override
-    public byte[] array(byte[] data, int ignoreTailBytes, boolean bigEndian) {
-        long value = calculate(data, ignoreTailBytes);
+    public byte[] array(byte[] data, int offset, int length, boolean bigEndian) {
+        long value = calculate(data, offset, length);
         byte[] result = new byte[crcByteLength];
         for (int i = 0; i < crcByteLength; i++) {
             int index = bigEndian ? (crcByteLength - 1 - i) : i;
@@ -77,7 +79,6 @@ public class StandardCRC implements CRC<Long> {
         }
         return result;
     }
-
 
 
 }

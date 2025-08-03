@@ -21,75 +21,70 @@ package plus.wcj.crc;
  */
 public interface CRC<T> {
 
+
     default T calculate(byte[] data) {
-        return calculate(data, 0);
+        return calculate(data, 0, data.length);
     }
 
-    T calculate(byte[] data, int ignoreTailBytes);
+    T calculate(byte[] data, int offset, int length);
 
-    byte[] array(byte[] data, int ignoreTailBytes, boolean bigEndian);
 
-    // ======== default Method
+    int getCrcByteLength();
 
+    // array byte
     default byte[] array(byte[] data) {
-        return array(data, 0, true);
+        return array(data, 0, data.length, true);
     }
 
     default byte[] array(byte[] data, boolean bigEndian) {
-        return array(data, 0, bigEndian);
+        return array(data, 0, data.length, bigEndian);
     }
 
-    default byte[] array(byte[] data, int ignoreTailBytes) {
-        return array(data, ignoreTailBytes, true);
-    }
+    byte[] array(byte[] data, int offset, int length, boolean bigEndian);
+    // array byte
 
+    // array String
     default byte[] array(String data) {
-        return array(data.getBytes(), 0, true);
+        return array(data.getBytes(), 0, data.length(), true);
     }
 
     default byte[] array(String data, boolean bigEndian) {
-        return array(data, 0, bigEndian);
+        return array(data.getBytes(), 0, data.length(), bigEndian);
     }
 
-    default byte[] array(String data, int ignoreTailBytes) {
-        return array(data, ignoreTailBytes, true);
+    default byte[] array(String data, int offset, int length, boolean bigEndian) {
+        return array(data.getBytes(), offset, length, bigEndian);
     }
-
-    default byte[] array(String data, int ignoreTailBytes, boolean bigEndian){
-        return array(data.getBytes(), ignoreTailBytes, bigEndian);
-    }
+    // array String
 
 
+    // hex byte
     default String hex(byte[] data) {
-        return hex(data, 0, true);
+        return CRCUtils.bytesToHex(array(data, 0, data.length, true));
     }
 
     default String hex(byte[] data, boolean bigEndian) {
-        return hex(data, 0, bigEndian);
+        return CRCUtils.bytesToHex(array(data, 0, data.length, bigEndian));
     }
 
-    default String hex(byte[] data, int ignoreTailBytes) {
-        return hex(data, ignoreTailBytes, true);
+    default String hex(byte[] data, int offset, int length, boolean bigEndian ) {
+        return CRCUtils.bytesToHex(array(data, offset, length, bigEndian));
     }
+    // hex byte
 
-    default String hex(byte[] data, int ignoreTailBytes, boolean bigEndian) {
-        return CRCUtils.bytesToHex(array(data, ignoreTailBytes, bigEndian));
-    }
 
+    // hex String
     default String hex(String data) {
-        return hex(data, 0, true);
+        return CRCUtils.bytesToHex(array(data.getBytes(), 0, data.length(), true));
     }
 
     default String hex(String data, boolean bigEndian) {
-        return hex(data, 0, bigEndian);
+        return CRCUtils.bytesToHex(array(data.getBytes(), 0, data.length(), bigEndian));
     }
 
-    default String hex(String data, int ignoreTailBytes) {
-        return hex(data, ignoreTailBytes, true);
+    default String hex(String data, int offset, int length, boolean bigEndian) {
+        return CRCUtils.bytesToHex(array(data.getBytes(), offset, length, bigEndian));
     }
-
-    default String hex(String data, int ignoreTailBytes, boolean bigEndian) {
-        return CRCUtils.bytesToHex(array(data, ignoreTailBytes, bigEndian));
-    }
+    // hex String
 
 }

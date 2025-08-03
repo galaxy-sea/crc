@@ -16,11 +16,14 @@
 
 package plus.wcj.crc;
 
+import lombok.Getter;
+
 import java.math.BigInteger;
 
 /**
  * @author ChangJin Wei (魏昌进)
  */
+@Getter
 public class BigCRC implements CRC<BigInteger> {
 
     public final int width, crcByteLength;
@@ -37,15 +40,16 @@ public class BigCRC implements CRC<BigInteger> {
         this.init = new BigInteger(initHex, 16);
         this.xorout = new BigInteger(xoroutHex, 16);
         this.mask = BigInteger.ONE.shiftLeft(width).subtract(BigInteger.ONE);
+
         this.refin = refin;
         this.refout = refout;
     }
 
     @Override
-    public BigInteger calculate(byte[] data, int ignoreTailBytes) {
+    public BigInteger calculate(byte[] data, int offset, int length) {
         BigInteger crc = init;
-        int limit = data.length - ignoreTailBytes;
-        for (int i = 0; i < limit - ignoreTailBytes; i++) {
+        int end = offset + length;
+        for (int i = offset; i < end; i++) {
             int value = data[i] & 0xFF;
             if (refin) {
                 value = CRCUtils.reverseBits(value, 8);
@@ -67,29 +71,25 @@ public class BigCRC implements CRC<BigInteger> {
     }
 
 
-
     @Override
-    public byte[] array(byte[] data, int ignoreTailBytes, boolean bigEndian) {
-        BigInteger value = calculate(data, ignoreTailBytes);
+    public byte[] array(byte[] data, int offset, int length, boolean bigEndian) {
+        BigInteger value = calculate(data, offset, length);
         byte[] raw = value.toByteArray();
 
-        // 修剪/补齐为固定长度
-        byte[] fixed = new byte[crcByteLength];
+        byte[] result = new byte[crcByteLength];
         int copyStart = Math.max(0, raw.length - crcByteLength);
         int copyLength = Math.min(raw.length, crcByteLength);
-        System.arraycopy(raw, copyStart, fixed, crcByteLength - copyLength, copyLength);
+        System.arraycopy(raw, copyStart, result, crcByteLength - copyLength, copyLength);
 
         if (!bigEndian) {
-            // 小端需要反转数组
             for (int i = 0; i < crcByteLength / 2; i++) {
-                byte tmp = fixed[i];
-                fixed[i] = fixed[crcByteLength - 1 - i];
-                fixed[crcByteLength - 1 - i] = tmp;
+                byte tmp = result[i];
+                result[i] = result[crcByteLength - 1 - i];
+                result[crcByteLength - 1 - i] = tmp;
             }
         }
-        return fixed;
+        return result;
     }
-
 
 
 }
