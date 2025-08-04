@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package plus.wcj.crc;
+package plus.wcj.crc.bitwise;
 
 import lombok.Getter;
+import plus.wcj.crc.CRC;
+import plus.wcj.crc.CRCModel;
 
 /**
  * @author ChangJin Wei (魏昌进)
@@ -30,24 +32,29 @@ public class StandardCRC implements CRC<Long> {
 
     public final boolean refin, refout;
 
+    public final String[] names;
 
-    public StandardCRC(int width, long poly, long init, boolean refin, boolean refout, long xorout) {
-        this.width = width;
-        this.crcByteLength = (width + 7) / 8;
 
-        this.poly = poly;
-        this.init = init;
-        this.refout = refout;
-        this.mask = -1L >>> (64 - width);
+    public StandardCRC(CRCModel<Long> crcParams) {
+        this.width = crcParams.width;
+        this.crcByteLength = crcParams.crcByteLength;
 
-        this.refin = refin;
-        this.xorout = xorout;
+        this.poly = crcParams.poly;
+        this.init = crcParams.init;
+        this.xorout = crcParams.xorout;
+        this.mask = crcParams.mask;
+
+        this.refin = crcParams.refin;
+        this.refout = crcParams.refout;
+
+        this.names = crcParams.names;
     }
 
     @Override
     public Long calculate(byte[] data, int offset, int length) {
         long crc = init;
-        for (int i = 0; i < data.length; i++) {
+        int end = offset + length;
+        for (int i = offset; i < end; i++) {
             int value = data[i] & 0xFF;
             if (refin) {
                 value = Integer.reverse(value) >>> (32 - 8);

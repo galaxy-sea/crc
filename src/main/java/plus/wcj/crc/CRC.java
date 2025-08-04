@@ -16,10 +16,21 @@
 
 package plus.wcj.crc;
 
+import plus.wcj.crc.bitwise.BigCRC;
+import plus.wcj.crc.bitwise.StandardCRC;
+
+
 /**
  * @author ChangJin Wei (魏昌进)
  */
 public interface CRC<T> {
+
+    static CRC create(CRCModel crcParams) {
+        if (crcParams.width > 64) {
+            return new BigCRC(crcParams);
+        }
+        return new StandardCRC(crcParams);
+    }
 
 
     default T calculate(byte[] data) {
@@ -27,9 +38,6 @@ public interface CRC<T> {
     }
 
     T calculate(byte[] data, int offset, int length);
-
-
-    int getCrcByteLength();
 
     // array byte
     default byte[] array(byte[] data) {
@@ -67,7 +75,7 @@ public interface CRC<T> {
         return CRCUtils.bytesToHex(array(data, 0, data.length, bigEndian));
     }
 
-    default String hex(byte[] data, int offset, int length, boolean bigEndian ) {
+    default String hex(byte[] data, int offset, int length, boolean bigEndian) {
         return CRCUtils.bytesToHex(array(data, offset, length, bigEndian));
     }
     // hex byte

@@ -18,18 +18,9 @@ package plus.wcj.crc;
 
 /**
  * @author ChangJin Wei (魏昌进)
+ * @since 2025/8/4
  */
-public class NoOpCRC implements CRC<Long> {
+public class Test22 {
 
-    @Override
-    public Long calculate(byte[] data, int offset, int length) {
-        return 0L;
-    }
-
-
-    @Override
-    public byte[] array(byte[] data, int offset, int length, boolean bigEndian) {
-        return new byte[0];
-    }
 
 }

@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package plus.wcj.crc;
+package plus.wcj.crc.bitwise;
 
 import lombok.Getter;
+import plus.wcj.crc.CRC;
+import plus.wcj.crc.CRCModel;
+import plus.wcj.crc.CRCUtils;
 
 import java.math.BigInteger;
 
@@ -32,17 +35,22 @@ public class BigCRC implements CRC<BigInteger> {
 
     public final boolean refin, refout;
 
-    public BigCRC(int width, String polyHex, String initHex, boolean refin, boolean refout, String xoroutHex) {
-        this.width = width;
-        this.crcByteLength = (width + 7) / 8;
+    public final String[] names;
 
-        this.poly = new BigInteger(polyHex, 16);
-        this.init = new BigInteger(initHex, 16);
-        this.xorout = new BigInteger(xoroutHex, 16);
-        this.mask = BigInteger.ONE.shiftLeft(width).subtract(BigInteger.ONE);
 
-        this.refin = refin;
-        this.refout = refout;
+    public BigCRC(CRCModel<BigInteger> crcParams) {
+        this.width = crcParams.width;
+        this.crcByteLength = crcParams.crcByteLength;
+
+        this.poly = crcParams.poly;
+        this.init = crcParams.init;
+        this.xorout = crcParams.xorout;
+        this.mask = crcParams.mask;
+
+        this.refin = crcParams.refin;
+        this.refout = crcParams.refout;
+
+        this.names = crcParams.names;
     }
 
     @Override
