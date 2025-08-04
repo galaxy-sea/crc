@@ -17,6 +17,8 @@
 package plus.wcj.crc;
 
 import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * @author ChangJin Wei (魏昌进)
@@ -26,12 +28,12 @@ public class CRCModel<T extends Number> {
     // NO_OP_CRC(new NoOpCRC(, "", "NoOpCRC"),
 
     // CRC 3
-    public static final CRCModel<Long> CRC_3_GSM = create(3, 0x3L, 0x0L, false, false, 0x7L, "4", "CRC-3/GSM");
-    public static final CRCModel<Long> CRC_3_ROHC = create(3, 0x3L, 0x7L, true, true, 0x0L, "6", "CRC-3/ROHC");
+    public static final CRCModel<Long> CRC_3_GSM = create(3, 0x3L, 0x0L, false, false, 0x7L, "04", "CRC-3/GSM");
+    public static final CRCModel<Long> CRC_3_ROHC = create(3, 0x3L, 0x7L, true, true, 0x0L, "06", "CRC-3/ROHC");
 
     // CRC 4
-    public static final CRCModel<Long> CRC_4_G_704 = create(4, 0x3L, 0x0L, true, true, 0x0L, "7", "CRC-4/G-704", "CRC-4/ITU");
-    public static final CRCModel<Long> CRC_4_INTERLAKEN = create(4, 0x3L, 0xfL, false, false, 0xfL, "B", "CRC-4/INTERLAKEN");
+    public static final CRCModel<Long> CRC_4_G_704 = create(4, 0x3L, 0x0L, true, true, 0x0L, "07", "CRC-4/G-704", "CRC-4/ITU");
+    public static final CRCModel<Long> CRC_4_INTERLAKEN = create(4, 0x3L, 0xfL, false, false, 0xfL, "0B", "CRC-4/INTERLAKEN");
 
     // CRC 5
     public static final CRCModel<Long> CRC_5_EPC_C1G2 = create(5, 0x9L, 0x9L, false, false, 0x0L, "00", "CRC-5/EPC-C1G2", "CRC-5/EPC");
@@ -72,19 +74,19 @@ public class CRCModel<T extends Number> {
     public static final CRCModel<Long> CRC_8_WCDMA = create(8, 0x9bL, 0x0L, true, true, 0x0L, "25", "CRC-8/WCDMA");
 
     // CRC 10
-    public static final CRCModel<Long> CRC_10_ATM = create(10, 0x233L, 0x0L, false, false, 0x0L, "199", "CRC-10/ATM", "CRC-10", "CRC-10/I-610");
-    public static final CRCModel<Long> CRC_10_CDMA2000 = create(10, 0x3d9L, 0x3ffL, false, false, 0x0L, "233", "CRC-10/CDMA2000");
-    public static final CRCModel<Long> CRC_10_GSM = create(10, 0x175L, 0x0L, false, false, 0x3ffL, "12A", "CRC-10/GSM");
+    public static final CRCModel<Long> CRC_10_ATM = create(10, 0x233L, 0x0L, false, false, 0x0L, "0199", "CRC-10/ATM", "CRC-10", "CRC-10/I-610");
+    public static final CRCModel<Long> CRC_10_CDMA2000 = create(10, 0x3d9L, 0x3ffL, false, false, 0x0L, "0233", "CRC-10/CDMA2000");
+    public static final CRCModel<Long> CRC_10_GSM = create(10, 0x175L, 0x0L, false, false, 0x3ffL, "012A", "CRC-10/GSM");
 
     // CRC 11
-    public static final CRCModel<Long> CRC_11_FLEXRAY = create(11, 0x385L, 0x1aL, false, false, 0x0L, "5A3", "CRC-11/FLEXRAY", "CRC-11");
-    public static final CRCModel<Long> CRC_11_UMTS = create(11, 0x307L, 0x0L, false, false, 0x0L, "061", "CRC-11/UMTS");
+    public static final CRCModel<Long> CRC_11_FLEXRAY = create(11, 0x385L, 0x1aL, false, false, 0x0L, "05A3", "CRC-11/FLEXRAY", "CRC-11");
+    public static final CRCModel<Long> CRC_11_UMTS = create(11, 0x307L, 0x0L, false, false, 0x0L, "0061", "CRC-11/UMTS");
 
     // CRC 12
-    public static final CRCModel<Long> CRC_12_CDMA2000 = create(12, 0xf13L, 0xfffL, false, false, 0x0L, "D4D", "CRC-12/CDMA2000");
-    public static final CRCModel<Long> CRC_12_DECT = create(12, 0x80fL, 0x0L, false, false, 0x0L, "F5B", "CRC-12/DECT", "X-CRC-12");
-    public static final CRCModel<Long> CRC_12_GSM = create(12, 0xd31L, 0x0L, false, false, 0xfffL, "B34", "CRC-12/GSM");
-    public static final CRCModel<Long> CRC_12_UMTS = create(12, 0x80fL, 0x0L, false, true, 0x0L, "DAF", "CRC-12/UMTS", "CRC-12/3GPP");
+    public static final CRCModel<Long> CRC_12_CDMA2000 = create(12, 0xf13L, 0xfffL, false, false, 0x0L, "0D4D", "CRC-12/CDMA2000");
+    public static final CRCModel<Long> CRC_12_DECT = create(12, 0x80fL, 0x0L, false, false, 0x0L, "0F5B", "CRC-12/DECT", "X-CRC-12");
+    public static final CRCModel<Long> CRC_12_GSM = create(12, 0xd31L, 0x0L, false, false, 0xfffL, "0B34", "CRC-12/GSM");
+    public static final CRCModel<Long> CRC_12_UMTS = create(12, 0x80fL, 0x0L, false, true, 0x0L, "0DAF", "CRC-12/UMTS", "CRC-12/3GPP");
 
     // CRC 13
     public static final CRCModel<Long> CRC_13_BBC = create(13, 0x1cf5L, 0x0L, false, false, 0x0L, "04FA", "CRC-13/BBC");
@@ -130,7 +132,7 @@ public class CRCModel<T extends Number> {
     public static final CRCModel<Long> CRC_16_XMODEM = create(16, 0x1021L, 0x0L, false, false, 0x0L, "31C3", "CRC-16/XMODEM", "CRC-16/ACORN", "CRC-16/LTE", "CRC-16/V-41-MSB", "XMODEM", "ZMODEM");
 
     // CRC 17
-    public static final CRCModel<Long> CRC_17_CAN_FD = create(17, 0x1685bL, 0x0L, false, false, 0x0L, "04F03", "CRC-17/CAN-FD");
+    public static final CRCModel<Long> CRC_17_CAN_FD = create(17, 0x1685bL, 0x0L, false, false, 0x0L, "004F03", "CRC-17/CAN-FD");
 
     // CRC 21
     public static final CRCModel<Long> CRC_21_CAN_FD = create(21, 0x102899L, 0x0L, false, false, 0x0L, "0ED841", "CRC-21/CAN-FD");
@@ -178,7 +180,7 @@ public class CRCModel<T extends Number> {
     public static final CRCModel<Long> CRC_64_XZ = create(64, 0x42f0e1eba9ea3693L, 0xffffffffffffffffL, true, true, 0xffffffffffffffffL, "995DC9BBDF1939FA", "CRC-64/XZ", "CRC-64/GO-ECMA");
 
     // CRC 82
-    public static final CRCModel<BigInteger> CRC_82_DARC = create(82, "308c0111011401440411", "0", true, true, "0", "09EA83F625023801FD612", "CRC-82/DARC");
+    public static final CRCModel<BigInteger> CRC_82_DARC = create(82, "308c0111011401440411", "0", true, true, "0", "009EA83F625023801FD612", "CRC-82/DARC");
 
 
     public final int width, crcByteLength;
@@ -226,5 +228,134 @@ public class CRCModel<T extends Number> {
                               new BigInteger(xorout, 16),
                               BigInteger.ONE.shiftLeft(width).subtract(BigInteger.ONE),
                               check, names);
+    }
+
+    public static final CRCModel[] values = new CRCModel[]{
+            CRC_3_GSM,
+            CRC_3_ROHC,
+            CRC_4_G_704,
+            CRC_4_INTERLAKEN,
+            CRC_5_EPC_C1G2,
+            CRC_5_G_704,
+            CRC_5_USB,
+            CRC_6_CDMA2000_A,
+            CRC_6_CDMA2000_B,
+            CRC_6_DARC,
+            CRC_6_G_704,
+            CRC_6_GSM,
+            CRC_7_MMC,
+            CRC_7_ROHC,
+            CRC_7_UMTS,
+            CRC_8_AUTOSAR,
+            CRC_8_BLUETOOTH,
+            CRC_8_CDMA2000,
+            CRC_8_DARC,
+            CRC_8_DVB_S2,
+            CRC_8_GSM_A,
+            CRC_8_GSM_B,
+            CRC_8_HITAG,
+            CRC_8_I_432_1,
+            CRC_8_I_CODE,
+            CRC_8_LTE,
+            CRC_8_MAXIM_DOW,
+            CRC_8_NRSC_5,
+            CRC_8_OPENSAFETY,
+            CRC_8_ROHC,
+            CRC_8_SAE_J1850,
+            CRC_8_SMBUS,
+            CRC_8_TECH_3250,
+            CRC_8_WCDMA,
+            CRC_10_ATM,
+            CRC_10_CDMA2000,
+            CRC_10_GSM,
+            CRC_11_FLEXRAY,
+            CRC_11_UMTS,
+            CRC_12_CDMA2000,
+            CRC_12_DECT,
+            CRC_12_GSM,
+            CRC_12_UMTS,
+            CRC_13_BBC,
+            CRC_14_DARC,
+            CRC_14_GSM,
+            CRC_15_CAN,
+            CRC_15_MPT1327,
+            CRC_16_ARC,
+            CRC_16_CDMA2000,
+            CRC_16_CMS,
+            CRC_16_DDS_110,
+            CRC_16_DECT_X,
+            CRC_16_DNP,
+            CRC_16_EN_13757,
+            CRC_16_GENIBUS,
+            CRC_16_GSM,
+            CRC_16_IBM_3740,
+            CRC_16_IBM_SDLC,
+            CRC_16_ISO_IEC_14443_3_A,
+            CRC_16_KERMIT,
+            CRC_16_LJ1200,
+            CRC_16_M17,
+            CRC_16_MAXIM_DOW,
+            CRC_16_MCRF4XX,
+            CRC_16_MODBUS,
+            CRC_16_NRSC_5,
+            CRC_16_OPENSAFETY_A,
+            CRC_16_OPENSAFETY_B,
+            CRC_16_PROFIBUS,
+            CRC_16_RIELLO,
+            CRC_16_SPI_FUJITSU,
+            CRC_16_T10_DIF,
+            CRC_16_TELEDISK,
+            CRC_16_TMS37157,
+            CRC_16_UMTS,
+            CRC_16_USB,
+            CRC_16_XMODEM,
+            CRC_17_CAN_FD,
+            CRC_21_CAN_FD,
+            CRC_24_BLE,
+            CRC_24_FLEXRAY_A,
+            CRC_24_FLEXRAY_B,
+            CRC_24_INTERLAKEN,
+            CRC_24_LTE_A,
+            CRC_24_LTE_B,
+            CRC_24_OPENPGP,
+            CRC_24_OS_9,
+            CRC_30_CDMA,
+            CRC_31_PHILIPS,
+            CRC_32_AIXM,
+            CRC_32_AUTOSAR,
+            CRC_32_BASE91_D,
+            CRC_32_BZIP2,
+            CRC_32_CD_ROM_EDC,
+            CRC_32_CKSUM,
+            CRC_32_ISCSI,
+            CRC_32_ISO_HDLC,
+            CRC_32_JAMCRC,
+            CRC_32_MEF,
+            CRC_32_MPEG_2,
+            CRC_32_XFER,
+            CRC_40_GSM,
+            CRC_64_ECMA_182,
+            CRC_64_GO_ISO,
+            CRC_64_MS,
+            CRC_64_NVME,
+            CRC_64_REDIS,
+            CRC_64_WE,
+            CRC_64_XZ,
+            CRC_82_DARC,
+    };
+
+
+    @Override
+    public boolean equals(Object object) {
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        CRCModel<?> crcModel = (CRCModel<?>) object;
+        return width == crcModel.width && crcByteLength == crcModel.crcByteLength && refin == crcModel.refin && refout == crcModel.refout && Objects.equals(poly, crcModel.poly) && Objects.equals(init, crcModel.init) && Objects.equals(xorout, crcModel.xorout) && Objects.equals(mask, crcModel.mask) && Objects.equals(check, crcModel.check) && Objects.deepEquals(names, crcModel.names);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(width, crcByteLength, poly, init, xorout, mask, refin, refout, check, Arrays.hashCode(names));
     }
 }
