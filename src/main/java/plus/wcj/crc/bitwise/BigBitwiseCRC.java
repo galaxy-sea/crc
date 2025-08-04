@@ -27,7 +27,7 @@ import java.math.BigInteger;
  * @author ChangJin Wei (魏昌进)
  */
 @Getter
-public class BigCRC implements CRC<BigInteger> {
+public class BigBitwiseCRC implements CRC<BigInteger> {
 
     public final int width, crcByteLength;
 
@@ -38,7 +38,7 @@ public class BigCRC implements CRC<BigInteger> {
     public final String[] names;
 
 
-    public BigCRC(CRCModel<BigInteger> crcParams) {
+    public BigBitwiseCRC(CRCModel<BigInteger> crcParams) {
         this.width = crcParams.width;
         this.crcByteLength = crcParams.crcByteLength;
 

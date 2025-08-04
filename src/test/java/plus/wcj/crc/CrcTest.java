@@ -18,11 +18,7 @@ package plus.wcj.crc;
 
 
 import org.junit.Test;
-import plus.wcj.crc.bitwise.BigCRC;
-import plus.wcj.crc.bitwise.StandardCRC;
-
-import java.math.BigInteger;
-import java.util.Arrays;
+import plus.wcj.crc.bitwise.BitwiseCRC;
 
 /**
  * @author ChangJin Wei (魏昌进)
@@ -84,8 +80,7 @@ public class CrcTest {
         CRC crc = CRC.create(CRCModel.CRC_82_DARC);
 
 
-        StandardCRC crc123 = (StandardCRC) CRC.create(CRCModel.CRC_4_G_704);
-        BigCRC crc5643 = (BigCRC) CRC.create(CRCModel.CRC_82_DARC);
+        BitwiseCRC crc123 = (BitwiseCRC) CRC.create(CRCModel.CRC_4_G_704);
 
     }
 

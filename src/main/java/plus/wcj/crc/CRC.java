@@ -16,8 +16,8 @@
 
 package plus.wcj.crc;
 
-import plus.wcj.crc.bitwise.BigCRC;
-import plus.wcj.crc.bitwise.StandardCRC;
+import plus.wcj.crc.bitwise.BigBitwiseCRC;
+import plus.wcj.crc.bitwise.BitwiseCRC;
 
 
 /**
@@ -27,9 +27,9 @@ public interface CRC<T> {
 
     static CRC create(CRCModel crcParams) {
         if (crcParams.width > 64) {
-            return new BigCRC(crcParams);
+            return new BigBitwiseCRC(crcParams);
         }
-        return new StandardCRC(crcParams);
+        return new BitwiseCRC(crcParams);
     }
 
 

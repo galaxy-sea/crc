@@ -24,7 +24,7 @@ import plus.wcj.crc.CRCModel;
  * @author ChangJin Wei (魏昌进)
  */
 @Getter
-public class StandardCRC implements CRC<Long> {
+public class BitwiseCRC implements CRC<Long> {
 
     public final int width, crcByteLength;
 
@@ -35,7 +35,7 @@ public class StandardCRC implements CRC<Long> {
     public final String[] names;
 
 
-    public StandardCRC(CRCModel<Long> crcParams) {
+    public BitwiseCRC(CRCModel<Long> crcParams) {
         this.width = crcParams.width;
         this.crcByteLength = crcParams.crcByteLength;
 
