@@ -16,14 +16,12 @@
 
 package plus.wcj.crc.bitwise;
 
-import lombok.Getter;
 import plus.wcj.crc.CRC;
 import plus.wcj.crc.CRCModel;
 
 /**
  * @author ChangJin Wei (魏昌进)
  */
-@Getter
 public class BitwiseCRC implements CRC<Long> {
 
     public final int width, crcByteLength;
@@ -55,7 +53,7 @@ public class BitwiseCRC implements CRC<Long> {
         long crc = init;
         int end = offset + length;
         for (int i = offset; i < end; i++) {
-            int value = data[i] & 0xFF;
+            int value = data[i];
             if (refin) {
                 value = Integer.reverse(value) >>> (32 - 8);
             }
@@ -67,6 +65,7 @@ public class BitwiseCRC implements CRC<Long> {
                     crc ^= poly;
                 }
             }
+            //
         }
         if (refout) {
             crc = Long.reverse(crc) >>> (64 - width);

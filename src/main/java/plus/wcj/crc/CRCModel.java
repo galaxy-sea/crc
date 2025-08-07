@@ -25,6 +25,55 @@ import java.util.Objects;
  */
 public class CRCModel<T extends Number> {
 
+
+    public final int width, crcByteLength;
+
+    public final T poly, init, xorout, mask;
+
+    public final boolean refin, refout;
+
+    public final String check;
+
+    public final String[] names;
+
+    public static final String checkInput = "123456789";
+
+    private CRCModel(int width, T poly, T init, boolean refin, boolean refout, T xorout,
+                     T mask,
+                     String check, String... names) {
+        this.width = width;
+        this.crcByteLength = (width + 7) / 8;
+
+        this.poly = poly;
+        this.init = init;
+        this.refout = refout;
+        this.mask = mask;
+
+        this.refin = refin;
+        this.xorout = xorout;
+
+        this.check = check;
+        this.names = names;
+    }
+
+    public static CRCModel<Long> create(int width, long poly, long init, boolean refin, boolean refout, long xorout, String check, String... names) {
+        return new CRCModel<>(width,
+                              poly, init,
+                              refin, refout,
+                              xorout,
+                              -1L >>> (64 - width),
+                              check, names);
+    }
+
+    public static CRCModel<BigInteger> create(int width, String poly, String init, boolean refin, boolean refout, String xorout, String check, String... names) {
+        return new CRCModel<>(width,
+                              new BigInteger(poly, 16), new BigInteger(init, 16),
+                              refin, refout,
+                              new BigInteger(xorout, 16),
+                              BigInteger.ONE.shiftLeft(width).subtract(BigInteger.ONE),
+                              check, names);
+    }
+
     // NO_OP_CRC(new NoOpCRC(, "", "NoOpCRC"),
 
     // CRC 3
@@ -183,52 +232,7 @@ public class CRCModel<T extends Number> {
     public static final CRCModel<BigInteger> CRC_82_DARC = create(82, "308c0111011401440411", "0", true, true, "0", "009EA83F625023801FD612", "CRC-82/DARC");
 
 
-    public final int width, crcByteLength;
 
-    public final T poly, init, xorout, mask;
-
-    public final boolean refin, refout;
-
-    public final String check;
-
-    public final String[] names;
-
-    public static final String checkInput = "123456789";
-
-    private CRCModel(int width, T poly, T init, boolean refin, boolean refout, T xorout,
-                     T mask, String check, String... names) {
-        this.width = width;
-        this.crcByteLength = (width + 7) / 8;
-
-        this.poly = poly;
-        this.init = init;
-        this.refout = refout;
-        this.mask = mask;
-
-        this.refin = refin;
-        this.xorout = xorout;
-
-        this.check = check;
-        this.names = names;
-    }
-
-    public static CRCModel<Long> create(int width, long poly, long init, boolean refin, boolean refout, long xorout, String check, String... names) {
-        return new CRCModel<>(width,
-                              poly, init,
-                              refin, refout,
-                              xorout,
-                              -1L >>> (64 - width),
-                              check, names);
-    }
-
-    public static CRCModel<BigInteger> create(int width, String poly, String init, boolean refin, boolean refout, String xorout, String check, String... names) {
-        return new CRCModel<>(width,
-                              new BigInteger(poly, 16), new BigInteger(init, 16),
-                              refin, refout,
-                              new BigInteger(xorout, 16),
-                              BigInteger.ONE.shiftLeft(width).subtract(BigInteger.ONE),
-                              check, names);
-    }
 
     public static final CRCModel[] values = new CRCModel[]{
             CRC_3_GSM,
@@ -343,19 +347,4 @@ public class CRCModel<T extends Number> {
             CRC_64_XZ,
             CRC_82_DARC,
     };
-
-
-    @Override
-    public boolean equals(Object object) {
-        if (object == null || getClass() != object.getClass()) {
-            return false;
-        }
-        CRCModel<?> crcModel = (CRCModel<?>) object;
-        return width == crcModel.width && crcByteLength == crcModel.crcByteLength && refin == crcModel.refin && refout == crcModel.refout && Objects.equals(poly, crcModel.poly) && Objects.equals(init, crcModel.init) && Objects.equals(xorout, crcModel.xorout) && Objects.equals(mask, crcModel.mask) && Objects.equals(check, crcModel.check) && Objects.deepEquals(names, crcModel.names);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(width, crcByteLength, poly, init, xorout, mask, refin, refout, check, Arrays.hashCode(names));
-    }
 }

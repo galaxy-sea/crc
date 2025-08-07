@@ -16,72 +16,38 @@
 
 package plus.wcj.crc;
 
-
 import org.junit.Test;
+import plus.wcj.crc.bitwise.BigBitwiseCRC;
 import plus.wcj.crc.bitwise.BitwiseCRC;
+
+import java.util.Arrays;
 
 /**
  * @author ChangJin Wei (魏昌进)
+ * @since 2025/8/4
  */
-public class CrcTest {
 
-    // @Test
-    // public void test() {
-    //     CRC crc = CRCModel.CRC_3_GSM.getCrc();
-    //     // System.out.println(CRCUtils.bytesToHex(crc.array("1234567890")));
-    //     System.out.println(CRCUtils.bytesToHex(crc.array("1234567890".getBytes())));
-    // }
-
-    // @Test
-    // public void check() {
-    //     for (CRCModel crcModel : CRCModel.values()) {
-    //         byte[] bytes = crcModel.getCrc().array(CRCModel.checkInput.getBytes());
-    //         String crc = CRCUtils.bytesToHex(bytes);
-    //         String check = CRCUtils.bytesToHex(CRCUtils.hexToBytes(crcModel.getCheck()));
-    //         if (!check.equalsIgnoreCase(crc)) {
-    //             // throw new RuntimeException(Arrays.toString(crcModel.getNames()) + " " + check + " " + crc);
-    //
-    //             System.out.println(Arrays.toString(crcModel.getNames()) + "对比值：" + check + " 结果数据：" + crc);
-    //         }
-    //
-    //     }
-    // }
-
-    // @Test
-    // public void example() {
-    //     String data = "1234567890";
-    //     for (CRCModel crcModel : CRCModel.values()) {
-    //         CRC crc = crcModel.getCrc();
-    //         String names = Arrays.toString(crcModel.getNames());
-    //
-    //         System.out.println(names + " checkSum: " + Arrays.toString(crc.array(data.getBytes())));
-    //         System.out.println(names + " checkSum: " + crc.hex(data.getBytes()));
-    //     }
-    // }
-
-
-    // @Test
-    // public void test64() {
-    //     StandardCRC standardCRC = new StandardCRC(64, 0x42F0E1EBA9EA3693L, 0x00000000L, false, false, 0x00000000L);
-    //     BigCRC bigCRC = new BigCRC(64, "42f0e1eba9ea3693", "0", false, false, "0");
-    //
-    //     Long calculate = standardCRC.calculate("123456789".getBytes());
-    //     System.out.println("------------");
-    //     BigInteger calculate1 = bigCRC.calculate("123456789".getBytes());
-    //
-    //     System.out.println("++++++++++++++++++++");
-    //     System.out.println(calculate);
-    //     System.out.println(calculate1);
-    // }
+public class CRCTest {
 
     @Test
-    public void test() {
-        CRC crc3 = CRC.create(CRCModel.CRC_4_G_704);
-        CRC crc = CRC.create(CRCModel.CRC_82_DARC);
+    public void bitwisehexCRC() {
+        for (CRCModel crcModel : CRCModel.values) {
 
 
-        BitwiseCRC crc123 = (BitwiseCRC) CRC.create(CRCModel.CRC_4_G_704);
+            CRC crc1 = new BigBitwiseCRC(crcModel);
+            CRC crc2 = crcModel.width == 82 ? crc1 : new BitwiseCRC(crcModel);
 
+            String BigBitwiseCRC = crc1.hex("123456789".getBytes());
+            String BitwiseCRC = crc2.hex("123456789".getBytes());
+
+            System.out.println("AA " + crc1);
+            System.out.println("BB " + crc2);
+            if (!BigBitwiseCRC.equals(BitwiseCRC)) {
+                throw new RuntimeException(Arrays.toString(crcModel.names) + " BigBitwiseCRC: " + BigBitwiseCRC + " BitwiseCRC: " + BitwiseCRC);
+            }
+
+        }
     }
+
 
 }

@@ -67,6 +67,7 @@ public final class CRCUtils {
      * @param width
      * @return
      */
+    @Deprecated
     public static int reverseBits(int value, int width) {
         int result = 0;
         for (int i = 0; i < width; i++) {
@@ -78,7 +79,7 @@ public final class CRCUtils {
     }
 
     /**
-     * {@link java.lang.Integer#reverse(int)}
+     * {@link java.lang.Long#reverse(long)}
      * @param value
      * @param width
      * @return
