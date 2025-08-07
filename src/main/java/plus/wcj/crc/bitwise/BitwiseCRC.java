@@ -32,6 +32,10 @@ public class BitwiseCRC implements CRC<Long> {
 
     public final String[] names;
 
+    public final long msbMask;
+
+    private final int widthDiff;
+
 
     public BitwiseCRC(CRCModel<Long> crcParams) {
         this.width = crcParams.width;
@@ -46,32 +50,37 @@ public class BitwiseCRC implements CRC<Long> {
         this.refout = crcParams.refout;
 
         this.names = crcParams.names;
+
+        this.msbMask = 1L << (width - 1);
+        this.widthDiff = 64 - width;
     }
 
     @Override
     public Long calculate(byte[] data, int offset, int length) {
         long crc = init;
         int end = offset + length;
+
         for (int i = offset; i < end; i++) {
             int value = data[i];
             if (refin) {
                 value = Integer.reverse(value) >>> (32 - 8);
             }
-            for (int j = 0; j < 8; j++) {
-                boolean inputBit = ((value >> (7 - j)) & 1) != 0;
-                boolean topBit = ((crc >> (width - 1)) & 1) != 0;
-                crc = ((crc << 1) & mask);
-                if (topBit ^ inputBit) {
+            for (int j = 0x80; j != 0; j >>= 1) {
+                long bit = crc & msbMask;
+                // crc = (crc << 1) & mask;
+                crc = (crc << 1);
+                if ((value & j) != 0) {
+                    bit ^= msbMask;
+                }
+                if (bit != 0) {
                     crc ^= poly;
                 }
             }
-            //
         }
         if (refout) {
-            crc = Long.reverse(crc) >>> (64 - width);
+            crc = Long.reverse(crc) >>> widthDiff;
         }
-        crc = (crc ^ xorout) & mask;
-        return crc;
+        return (crc ^ xorout) & mask;
     }
 
 
