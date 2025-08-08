@@ -18,71 +18,48 @@ package plus.wcj.crc.bitwise;
 
 import plus.wcj.crc.CRC;
 import plus.wcj.crc.CRCModel;
-import plus.wcj.crc.CRCUtils;
 
 import java.math.BigInteger;
 
 /**
  * @author ChangJin Wei (魏昌进)
  */
-public class BigBitwiseCRC implements CRC<BigInteger> {
+public class BigBitwiseCRC extends CRC.bigCRC {
 
-    public final int width, crcByteLength;
 
-    public final BigInteger poly, init, xorout, mask;
+    public BigBitwiseCRC(CRCModel crcParams) {
+        super(crcParams);
+    }
 
-    public final boolean refin, refout;
-
-    public final String[] names;
-
-    public BigBitwiseCRC(CRCModel m) {
-        this.width = m.width;
-        this.crcByteLength = m.crcByteLength;
-        this.poly = new BigInteger(String.valueOf(m.poly));
-        this.init = new BigInteger(String.valueOf(m.init));
-        this.xorout = new BigInteger(String.valueOf(m.xorout));
-        this.refin = m.refin;
-        this.refout = m.refout;
-        this.names = m.names;
-        // 若模型未提供 mask/msb，可根据 width 推导
-        this.mask = BigInteger.ONE.shiftLeft(width).subtract(BigInteger.ONE);
+    public BigInteger calculate(byte[] data) {
+        return calculate(data, 0, data.length);
     }
 
 
-    @Override
     public BigInteger calculate(byte[] data, int offset, int length) {
         BigInteger crc = init;
-        int end = offset + length;
-        for (int i = offset; i < end; i++) {
+        for (int i = offset; i < offset + length; i++) {
             int value = data[i];
             if (refin) {
                 value = Integer.reverse(value) >>> (32 - 8);
             }
-            for (int j = 0; j < 8; j++) {
-                boolean inputBit = ((value >> (7 - j)) & 1) != 0;
-                boolean topBit = crc.testBit(width - 1);
-                crc = crc.shiftLeft(1).and(mask);
-                if (topBit ^ inputBit) {
+            for (int j = 0x80; j != 0; j >>= 1) {
+                BigInteger bit = crc.and(msbMask);
+                // crc = crc.shiftLeft(1).and(mask);
+                crc = crc.shiftLeft(1);
+                if ((value & j) != 0) {
+                    bit = bit.xor(msbMask);
+                }
+                if (bit.compareTo(BigInteger.ZERO) != 0) {
                     crc = crc.xor(poly);
                 }
             }
         }
         if (refout) {
-            crc = CRCUtils.reverseBits(crc, width);
+            crc = reverseBits(crc, width);
         }
-        crc = crc.xor(xorout).and(mask);
-        return crc;
+        return crc.xor(xorout).and(mask);
     }
 
 
-    @Override
-    public byte[] array(byte[] data, int offset, int length, boolean bigEndian) {
-        BigInteger value = calculate(data, offset, length);
-        byte[] result = new byte[crcByteLength];
-        for (int i = 0; i < crcByteLength; i++) {
-            int index = bigEndian ? (crcByteLength - 1 - i) : i;
-            result[index] = (byte) (value.shiftRight(8 * i).and(BigInteger.valueOf(0xFF)).intValue());
-        }
-        return result;
-    }
 }

@@ -16,20 +16,24 @@
 
 package plus.wcj.crc;
 
+import org.junit.Test;
+import plus.wcj.crc.bitwise.BigBitwiseCRC;
+import plus.wcj.crc.bitwise.BitwiseCRC;
+
 /**
  * @author ChangJin Wei (魏昌进)
+ * @since 2025/8/7
  */
-public class NoOpCRC implements CRC<Long> {
+public class Example {
 
-    @Override
-    public Long calculate(byte[] data, int offset, int length) {
-        return 0L;
+
+    @Test
+    public void example() {
+        for (CRCModel crcModel : CRCModel.values) {
+            System.out.println(new BigBitwiseCRC(crcModel).hex(CRCModel.checkInput));
+            if (crcModel.width <= 64) {
+                System.out.println(new BitwiseCRC(crcModel).hex(CRCModel.checkInput));
+            }
+        }
     }
-
-
-    @Override
-    public byte[] array(byte[] data, int offset, int length, boolean bigEndian) {
-        return new byte[0];
-    }
-
 }

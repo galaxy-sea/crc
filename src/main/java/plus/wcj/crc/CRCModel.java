@@ -26,9 +26,9 @@ import java.util.Objects;
 public class CRCModel<T extends Number> {
 
 
-    public final int width, crcByteLength;
+    public final int width, widthDiff, crcByteLength;
 
-    public final T poly, init, xorout, mask;
+    public final T poly, init, xorout, mask, msbMask;
 
     public final boolean refin, refout;
 
@@ -39,15 +39,17 @@ public class CRCModel<T extends Number> {
     public static final String checkInput = "123456789";
 
     private CRCModel(int width, T poly, T init, boolean refin, boolean refout, T xorout,
-                     T mask,
+                     T mask, T msbMask,
                      String check, String... names) {
         this.width = width;
+        this.widthDiff = 64 - width;
         this.crcByteLength = (width + 7) / 8;
 
         this.poly = poly;
         this.init = init;
         this.refout = refout;
         this.mask = mask;
+        this.msbMask = msbMask;
 
         this.refin = refin;
         this.xorout = xorout;
@@ -61,7 +63,7 @@ public class CRCModel<T extends Number> {
                               poly, init,
                               refin, refout,
                               xorout,
-                              -1L >>> (64 - width),
+                              -1L >>> (64 - width), 1L << (width - 1),
                               check, names);
     }
 
@@ -70,7 +72,7 @@ public class CRCModel<T extends Number> {
                               new BigInteger(poly, 16), new BigInteger(init, 16),
                               refin, refout,
                               new BigInteger(xorout, 16),
-                              BigInteger.ONE.shiftLeft(width).subtract(BigInteger.ONE),
+                              BigInteger.ONE.shiftLeft(width).subtract(BigInteger.ONE), BigInteger.ONE.shiftLeft(width - 1),
                               check, names);
     }
 

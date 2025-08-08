@@ -22,41 +22,14 @@ import plus.wcj.crc.CRCModel;
 /**
  * @author ChangJin Wei (魏昌进)
  */
-public class BitwiseCRC implements CRC<Long> {
-
-    public final int width, crcByteLength;
-
-    public final long poly, init, xorout, mask;
-
-    public final boolean refin, refout;
-
-    public final String[] names;
-
-    public final long msbMask;
-
-    private final int widthDiff;
+public class BitwiseCRC extends CRC.LongCRC {
 
 
-    public BitwiseCRC(CRCModel<Long> crcParams) {
-        this.width = crcParams.width;
-        this.crcByteLength = crcParams.crcByteLength;
-
-        this.poly = crcParams.poly;
-        this.init = crcParams.init;
-        this.xorout = crcParams.xorout;
-        this.mask = crcParams.mask;
-
-        this.refin = crcParams.refin;
-        this.refout = crcParams.refout;
-
-        this.names = crcParams.names;
-
-        this.msbMask = 1L << (width - 1);
-        this.widthDiff = 64 - width;
+    public BitwiseCRC(CRCModel crcParams) {
+        super(crcParams);
     }
 
-    @Override
-    public Long calculate(byte[] data, int offset, int length) {
+    public long calculate(byte[] data, int offset, int length) {
         long crc = init;
         int end = offset + length;
 
@@ -81,18 +54,6 @@ public class BitwiseCRC implements CRC<Long> {
             crc = Long.reverse(crc) >>> widthDiff;
         }
         return (crc ^ xorout) & mask;
-    }
-
-
-    @Override
-    public byte[] array(byte[] data, int offset, int length, boolean bigEndian) {
-        long value = calculate(data, offset, length);
-        byte[] result = new byte[crcByteLength];
-        for (int i = 0; i < crcByteLength; i++) {
-            int index = bigEndian ? (crcByteLength - 1 - i) : i;
-            result[index] = (byte) ((value >> (8 * i)) & 0xFF);
-        }
-        return result;
     }
 
 
