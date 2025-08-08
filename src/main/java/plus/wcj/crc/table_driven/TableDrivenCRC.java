@@ -72,8 +72,7 @@ public class TableDrivenCRC extends CRC.LongCRC {
 
             table = new long[256];
             for (int i = 0; i < table.length; i++) {
-                long crc = getCrc(crcModel0, i);
-                table[i] = (crc ^ crcModel0.xorout) & crcModel0.mask;
+                table[i] = getCrc(crcModel0, i);
             }
             TABLE.put(crcModel.names, table);
             return table;

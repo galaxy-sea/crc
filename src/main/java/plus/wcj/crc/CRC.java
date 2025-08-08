@@ -127,7 +127,7 @@ public interface CRC {
 
     abstract class bigCRC implements CRC {
 
-        public final int width, crcByteLength;
+        public final int width, widthDiff ,crcByteLength;
 
         public final BigInteger poly, init, xorout, mask, msbMask;
 
@@ -146,6 +146,7 @@ public interface CRC {
             this.refout = crcParams.refout;
             this.names = crcParams.names;
             this.msbMask = new BigInteger(String.valueOf(crcParams.msbMask));
+            this.widthDiff = crcParams.widthDiff;
         }
 
 
@@ -156,7 +157,7 @@ public interface CRC {
         public abstract BigInteger calculate(byte[] data, int offset, int length);
 
 
-        public BigInteger reverseBits(BigInteger crc, int width) {
+        public static BigInteger reverseBits(BigInteger crc, int width) {
             BigInteger reversed = BigInteger.ZERO;
             for (int i = 0; i < width; i++) {
                 reversed = reversed.shiftLeft(1).or(crc.and(BigInteger.ONE));

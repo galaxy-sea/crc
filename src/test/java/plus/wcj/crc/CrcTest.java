@@ -17,7 +17,7 @@
 package plus.wcj.crc;
 
 import org.junit.Test;
-import plus.wcj.crc.bitwise.BigBitwiseCRC;
+import plus.wcj.crc.bitwise.BitwiseBigCRC;
 import plus.wcj.crc.bitwise.BitwiseCRC;
 import plus.wcj.crc.table_driven.TableDrivenCRC;
 
@@ -51,7 +51,7 @@ public class CRCTest {
     @Test
     public void testcalculate() {
         for (CRCModel crcModel : CRCModel.values) {
-            BigBitwiseCRC crc1 = new BigBitwiseCRC(crcModel);
+            BitwiseBigCRC crc1 = new BitwiseBigCRC(crcModel);
             if (crcModel.width == 82) {
                 continue;
             }
@@ -91,7 +91,7 @@ public class CRCTest {
 
 
     private void testhex(CRCModel crcModel) {
-        CRC crc1 = new BigBitwiseCRC(crcModel);
+        CRC crc1 = new BitwiseBigCRC(crcModel);
         CRC crc2 = crcModel.width == 82 ? crc1 : new BitwiseCRC(crcModel);
         CRC crc3 = crcModel.width == 82 ? crc1 : new TableDrivenCRC(crcModel);
 

@@ -24,10 +24,10 @@ import java.math.BigInteger;
 /**
  * @author ChangJin Wei (魏昌进)
  */
-public class BigBitwiseCRC extends CRC.bigCRC {
+public class BitwiseBigCRC extends CRC.bigCRC {
 
 
-    public BigBitwiseCRC(CRCModel crcParams) {
+    public BitwiseBigCRC(CRCModel crcParams) {
         super(crcParams);
     }
 

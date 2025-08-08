@@ -17,7 +17,7 @@
 package plus.wcj.crc;
 
 import org.junit.Test;
-import plus.wcj.crc.bitwise.BigBitwiseCRC;
+import plus.wcj.crc.bitwise.BitwiseBigCRC;
 import plus.wcj.crc.bitwise.BitwiseCRC;
 
 /**
@@ -30,7 +30,7 @@ public class Example {
     @Test
     public void example() {
         for (CRCModel crcModel : CRCModel.values) {
-            System.out.println(new BigBitwiseCRC(crcModel).hex(CRCModel.checkInput));
+            System.out.println(new BitwiseBigCRC(crcModel).hex(CRCModel.checkInput));
             if (crcModel.width <= 64) {
                 System.out.println(new BitwiseCRC(crcModel).hex(CRCModel.checkInput));
             }
