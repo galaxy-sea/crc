@@ -38,7 +38,7 @@ public final class CRCUtils {
 
     public  static byte[] hexToBytes(String hex) {
         if (hex.length() % 2 != 0) {
-            hex = "0" + hex;  // 左补0
+            hex = "0" + hex;
         }
         int len = hex.length();
         byte[] data = new byte[len / 2];

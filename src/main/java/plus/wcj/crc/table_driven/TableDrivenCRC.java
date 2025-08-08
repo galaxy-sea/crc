@@ -86,7 +86,6 @@ public class TableDrivenCRC extends CRC.LongCRC {
         }
         for (int j = 0x80; j != 0; j >>= 1) {
             long bit = crc & crcModel.msbMask;
-            // crc = (crc << 1) & crcModel.mask;
             crc = (crc << 1);
             if ((value & j) != 0) {
                 bit ^= crcModel.msbMask;
