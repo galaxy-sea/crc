@@ -19,6 +19,9 @@ package plus.wcj.crc;
 import org.junit.Test;
 import plus.wcj.crc.bitwise.BitwiseBigCRC;
 import plus.wcj.crc.bitwise.BitwiseCRC;
+import plus.wcj.crc.table_driven.TableDrivenCRC;
+
+import java.util.Arrays;
 
 /**
  * @author ChangJin Wei (魏昌进)
@@ -30,9 +33,11 @@ public class Example {
     @Test
     public void example() {
         for (CRCModel crcModel : CRCModel.values) {
-            System.out.println(new BitwiseBigCRC(crcModel).hex(CRCModel.checkInput));
+            String names = Arrays.toString(crcModel.names);
+            System.out.println(names+ " checkSum: " + new BitwiseBigCRC(crcModel).hex(CRCModel.checkInput));
             if (crcModel.width <= 64) {
-                System.out.println(new BitwiseCRC(crcModel).hex(CRCModel.checkInput));
+                System.out.println(names + " checkSum: " +new BitwiseCRC(crcModel).hex(CRCModel.checkInput));
+                System.out.println(names + " checkSum: " +new TableDrivenCRC(crcModel).hex(CRCModel.checkInput));
             }
         }
     }

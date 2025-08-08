@@ -25,7 +25,7 @@ import plus.wcj.crc.CRCModel;
 public class BitwiseCRC extends CRC.LongCRC {
 
 
-    public BitwiseCRC(CRCModel crcParams) {
+    public BitwiseCRC(CRCModel<Long> crcParams) {
         super(crcParams);
     }
 

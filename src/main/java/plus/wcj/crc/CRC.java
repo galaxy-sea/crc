@@ -91,17 +91,17 @@ public interface CRC {
 
         public final String[] names;
 
-        public LongCRC(CRCModel crcParams) {
+        public LongCRC(CRCModel<Long> crcParams) {
             this.width = crcParams.width;
             this.crcByteLength = crcParams.crcByteLength;
-            this.poly = (long) crcParams.poly;
-            this.init = (long) crcParams.init;
-            this.xorout = (long) crcParams.xorout;
-            this.mask = (long) crcParams.mask;
+            this.poly = crcParams.poly;
+            this.init = crcParams.init;
+            this.xorout = crcParams.xorout;
+            this.mask = crcParams.mask;
             this.refin = crcParams.refin;
             this.refout = crcParams.refout;
             this.names = crcParams.names;
-            this.msbMask = (long) crcParams.msbMask;
+            this.msbMask = crcParams.msbMask;
             this.widthDiff = crcParams.widthDiff;
         }
 

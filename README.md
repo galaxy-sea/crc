@@ -5,12 +5,15 @@ Feel free to Star, Fork, or submit Issues to contribute and improve the project!
 
 # Usage
 
-- maven 
+- maven
+
+![Maven Central Version](https://img.shields.io/maven-central/v/plus.wcj.crc/crc?style=flat-square)
+
 ```xml
 <dependency>
     <groupId>plus.wcj.crc</groupId>
     <artifactId>crc</artifactId>
-    <version>1.0.0</version>
+    <version>RELEASE</version>
 </dependency>
 ```
 
@@ -19,13 +22,13 @@ Feel free to Star, Fork, or submit Issues to contribute and improve the project!
 
 ```java
     public static void main(String[] args) {
-        byte[] data = "1234567890".getBytes();
-        for (CRCModel crcModel : CRCModel.values()) {
-            CRC crc = crcModel.getCrc();
-            String names = Arrays.toString(crcModel.getNames());
-    
-            System.out.println(names + " checkSum: " + Arrays.toString(crc.array(data)));
-            System.out.println(names + " checkSum: " + crc.hex(data));
+        for (CRCModel crcModel : CRCModel.values) {
+            String names = Arrays.toString(crcModel.names);
+            System.out.println(names + " checkSum: " + new BitwiseBigCRC(crcModel).hex(CRCModel.checkInput));
+            if (crcModel.width <= 64) {
+                System.out.println(names + " checkSum: " + new BitwiseCRC(crcModel).hex(CRCModel.checkInput));
+                System.out.println(names + " checkSum: " + new TableDrivenCRC(crcModel).hex(CRCModel.checkInput));
+            }
         }
     }
 ```
