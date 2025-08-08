@@ -44,13 +44,10 @@ public class BigBitwiseCRC extends CRC.bigCRC {
                 value = Integer.reverse(value) >>> (32 - 8);
             }
             for (int j = 0x80; j != 0; j >>= 1) {
-                BigInteger bit = crc.and(msbMask);
-                // crc = crc.shiftLeft(1).and(mask);
-                crc = crc.shiftLeft(1);
-                if ((value & j) != 0) {
-                    bit = bit.xor(msbMask);
-                }
-                if (bit.compareTo(BigInteger.ZERO) != 0) {
+                boolean inputBit = (value & j) != 0;
+                boolean topBit = crc.testBit(width - 1);
+                crc = crc.shiftLeft(1).and(mask);
+                if (topBit ^ inputBit) {
                     crc = crc.xor(poly);
                 }
             }

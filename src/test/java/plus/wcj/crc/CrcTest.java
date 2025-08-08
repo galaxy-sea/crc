@@ -43,6 +43,7 @@ public class CRCTest {
     @Test
     public void test64hex() {
             testhex(CRCModel.CRC_64_ECMA_182);
+            // testhex(CRCModel.CRC_82_DARC);
     }
 
 
@@ -51,7 +52,7 @@ public class CRCTest {
     public void testcalculate() {
         for (CRCModel crcModel : CRCModel.values) {
             BigBitwiseCRC crc1 = new BigBitwiseCRC(crcModel);
-            if (crcModel.width > 64) {
+            if (crcModel.width == 82) {
                 continue;
             }
             BitwiseCRC crc2 = new BitwiseCRC(crcModel);
@@ -103,13 +104,8 @@ public class CRCTest {
                 || !crcModel.check.equals(BitwiseCRC)
                 || !crcModel.check.equals(TableDrivenCRC)
         ) {
-            // System.out.println(Arrays.toString(crcModel.names) + " BigBitwiseCRC: " + BigBitwiseCRC + " BitwiseCRC: " + BitwiseCRC);
-            throw new RuntimeException(Arrays.toString(crcModel.names)
-                                               + " check: " + crcModel.check
-                                               + " BigBitwiseCRC: " + BigBitwiseCRC
-                                               + " BitwiseCRC: " + BitwiseCRC
-                                               + " TableDrivenCRC: " + TableDrivenCRC
-            );
+            // System.out.println(Arrays.toString(crcModel.names) + " check: " + crcModel.check + " BigBitwiseCRC: " + BigBitwiseCRC + " BitwiseCRC: " + BitwiseCRC + " TableDrivenCRC: " + TableDrivenCRC);
+            throw new RuntimeException(Arrays.toString(crcModel.names) + " check: " + crcModel.check + " BigBitwiseCRC: " + BigBitwiseCRC + " BitwiseCRC: " + BitwiseCRC + " TableDrivenCRC: " + TableDrivenCRC);
         }
     }
 
