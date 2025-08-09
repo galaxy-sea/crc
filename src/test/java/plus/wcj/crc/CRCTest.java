@@ -34,17 +34,45 @@ import java.util.TreeSet;
 public class CRCTest {
 
     @Test
-    public void testhex() {
+    public void testAllCrc() {
         for (CRCModel crcModel : CRCModel.values) {
-            testhex(crcModel);
+            CRC crc1 = new BitwiseBigCRC(crcModel);
+            CRC crc2 = crcModel.width == 82 ? crc1 : new BitwiseCRC(crcModel);
+            CRC crc3 = crcModel.width == 82 ? crc1 : new TableDrivenCRC(crcModel);
+            testhex(crcModel, CRCModel.checkInput,crc1, crc2, crc3);
         }
     }
 
     @Test
-    public void test64hex() {
-            testhex(CRCModel.CRC_64_ECMA_182);
-            // testhex(CRCModel.CRC_82_DARC);
+    public void testAllLoopCrc() {
+        for (CRCModel crcModel : CRCModel.values) {
+            StringBuilder builder = new StringBuilder();
+            CRC crc1 = new BitwiseBigCRC(crcModel);
+            CRC crc2 = crcModel.width == 82 ? crc1 : new BitwiseCRC(crcModel);
+            CRC crc3 = crcModel.width == 82 ? crc1 : new TableDrivenCRC(crcModel);
+            for (int i = Byte.MIN_VALUE; i < Byte.MAX_VALUE; i++) {
+                builder.append(i);
+                try {
+                    testhex1(crcModel, builder.toString(), crc1, crc2, crc3);
+                } catch (Exception e) {
+                    System.out.println(builder.toString());
+                    throw e;
+                }
+            }
+
+            for (int i = Byte.MAX_VALUE; i > Byte.MIN_VALUE; i--) {
+                builder.append(i);
+                try {
+                    testhex1(crcModel, builder.toString(), crc1, crc2, crc3);
+                } catch (Exception e) {
+                    System.out.println(builder.toString());
+                    throw e;
+                }
+            }
+        }
     }
+
+
 
 
 
@@ -90,20 +118,33 @@ public class CRCTest {
     }
 
 
-    private void testhex(CRCModel crcModel) {
-        CRC crc1 = new BitwiseBigCRC(crcModel);
-        CRC crc2 = crcModel.width == 82 ? crc1 : new BitwiseCRC(crcModel);
-        CRC crc3 = crcModel.width == 82 ? crc1 : new TableDrivenCRC(crcModel);
 
-        String BigBitwiseCRC = crc1.hex("123456789".getBytes());
-        String BitwiseCRC = crc2.hex("123456789".getBytes());
-        String TableDrivenCRC = crc3.hex("123456789".getBytes());
+
+    private void testhex(CRCModel crcModel, String data, CRC crc1, CRC  crc2, CRC  crc3) {
+
+        String BigBitwiseCRC = crc1.hex(data.getBytes());
+        String BitwiseCRC = crc2.hex(data.getBytes());
+        String TableDrivenCRC = crc3.hex(data.getBytes());
 
 
         if (!crcModel.check.equals(BigBitwiseCRC)
                 || !crcModel.check.equals(BitwiseCRC)
                 || !crcModel.check.equals(TableDrivenCRC)
         ) {
+            // System.out.println(Arrays.toString(crcModel.names) + " check: " + crcModel.check + " BigBitwiseCRC: " + BigBitwiseCRC + " BitwiseCRC: " + BitwiseCRC + " TableDrivenCRC: " + TableDrivenCRC);
+            throw new RuntimeException(Arrays.toString(crcModel.names) + " check: " + crcModel.check + " BigBitwiseCRC: " + BigBitwiseCRC + " BitwiseCRC: " + BitwiseCRC + " TableDrivenCRC: " + TableDrivenCRC);
+        }
+    }
+
+
+    private void testhex1(CRCModel crcModel, String data, CRC crc1, CRC crc2, CRC crc3) {
+
+        String BigBitwiseCRC = crc1.hex(data.getBytes());
+        String BitwiseCRC = crc2.hex(data.getBytes());
+        String TableDrivenCRC = crc3.hex(data.getBytes());
+
+
+        if (!BigBitwiseCRC.equals(BitwiseCRC) || !BigBitwiseCRC.equals(TableDrivenCRC)) {
             // System.out.println(Arrays.toString(crcModel.names) + " check: " + crcModel.check + " BigBitwiseCRC: " + BigBitwiseCRC + " BitwiseCRC: " + BitwiseCRC + " TableDrivenCRC: " + TableDrivenCRC);
             throw new RuntimeException(Arrays.toString(crcModel.names) + " check: " + crcModel.check + " BigBitwiseCRC: " + BigBitwiseCRC + " BitwiseCRC: " + BitwiseCRC + " TableDrivenCRC: " + TableDrivenCRC);
         }
