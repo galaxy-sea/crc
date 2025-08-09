@@ -38,7 +38,8 @@ public class BitwiseBigCRC extends CRC.bigCRC {
 
     public BigInteger calculate(byte[] data, int offset, int length) {
         BigInteger crc = init;
-        for (int i = offset; i < offset + length; i++) {
+        int end = offset + length;
+        for (int i = offset; i < end; i++) {
             int value = data[i];
             if (refin) {
                 value = Integer.reverse(value) >>> (32 - 8);
