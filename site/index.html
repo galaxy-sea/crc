@@ -1,0 +1,832 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRC Calculator - 在线 CRC 校验计算工具</title>
+    <meta name="description" content="在线 CRC 校验计算工具，支持 Modbus、CRC-16/MODBUS 等多种 CRC 算法、输入编码和 Hex 输出格式。Online CRC calculator supporting Modbus, CRC-16/MODBUS, many CRC algorithms, input encodings, and hex output formats.">
+    <meta name="keywords" content="CRC, CRC calculator, checksum, Modbus, CRC-16/MODBUS, CRC-16 MODBUS, CRC-8, CRC-16, CRC-32, CRC-64, online CRC, CRC计算器, CRC校验, Modbus CRC, 校验和">
+    <meta name="author" content="ChangJin Wei (魏昌进)">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://crc.wcj.plus/">
+    <link rel="author" href="https://wcj.plus/">
+    <link rel="alternate" hreflang="zh-CN" href="https://crc.wcj.plus/">
+    <link rel="alternate" hreflang="en" href="https://crc.wcj.plus/">
+    <link rel="alternate" hreflang="x-default" href="https://crc.wcj.plus/">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="zh_CN">
+    <meta property="og:locale:alternate" content="en_US">
+    <meta property="og:url" content="https://crc.wcj.plus/">
+    <meta property="og:title" content="CRC Calculator - 在线 CRC 校验计算工具">
+    <meta property="og:description" content="在线计算 CRC 校验值，支持 Modbus、CRC-16/MODBUS 等多种 CRC 算法、输入编码和 Hex 输出格式。Calculate CRC checksums online with Modbus, CRC-16/MODBUS, many CRC algorithms, input encodings, and hex output formats.">
+    <meta property="og:site_name" content="wcj.plus">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="CRC Calculator - 在线 CRC 校验计算工具">
+    <meta name="twitter:description" content="在线计算 CRC 校验值，支持 Modbus、CRC-16/MODBUS 等多种 CRC 算法、输入编码和 Hex 输出格式。Calculate CRC checksums online with Modbus, CRC-16/MODBUS, many CRC algorithms, input encodings, and hex output formats.">
+    <style>
+      body { font-family: system-ui, sans-serif;}
+      textarea { box-sizing: border-box; font-size: 16px; overflow: hidden; padding: 8px; width: 100%; }
+      label { display: block; margin-top: 6px; }
+      .options { display: flex; flex-wrap: wrap; gap: 8px; }
+      #message { background: #222; color: #fff; opacity: 0; padding: 6px 10px; pointer-events: none; position: fixed; transition: opacity .15s; white-space: nowrap; }
+      #message.show { opacity: 1; }
+      select { font-size: 16px; margin-top: 2px; padding: 3px 4px; }
+      table { border-collapse: collapse; margin-top: 16px; width: 100%; }
+      th:first-child, td:first-child { white-space: nowrap; width: 1%; }
+      th, td { border: 1px solid #ddd; padding: 8px; text-align: left; vertical-align: top; }
+      tbody td:first-child, tbody td:last-child { cursor: pointer; }
+      tr.pinned { background: #fff7d6; }
+      tr.pinned td:first-child { border-left: 4px solid #d59b00; font-weight: 700; }
+      code { white-space: nowrap; }
+    </style>
+  </head>
+  <body>
+    <textarea id="input" placeholder="输入内容">1234567890</textarea>
+    <div class="options">
+      <label>
+        Input Encoding
+        <select id="encoding">
+          <option value="utf8">UTF-8</option>
+          <option value="utf16le">UTF-16LE</option>
+          <option value="utf16be">UTF-16BE</option>
+          <option value="ascii">ASCII</option>
+          <option value="latin1">Latin-1</option>
+          <option value="hex">Hex</option>
+          <option value="base64">Base64</option>
+        </select>
+      </label>
+      <label>
+        Output Encoding
+        <select id="output-encoding">
+          <option value="hex-lower">Hex (Lower Case)</option>
+          <option value="hex-upper">Hex (Upper Case)</option>
+        </select>
+      </label>
+    </div>
+    <div id="message" aria-live="polite" role="status"></div>
+    <table>
+      <thead>
+        <tr>
+          <th>CRC名称</th>
+          <th>结果</th>
+        </tr>
+      </thead>
+      <tbody id="list">
+        <!-- CRC_MODELS_START -->
+        <tr data-method="crc_3_gsm">
+          <td>CRC-3/GSM</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_3_rohc">
+          <td>CRC-3/ROHC</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_4_g_704">
+          <td>CRC-4/G-704</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_4_itu">
+          <td>CRC-4/ITU</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_4_interlaken">
+          <td>CRC-4/INTERLAKEN</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_5_epc_c1g2">
+          <td>CRC-5/EPC-C1G2</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_5_epc">
+          <td>CRC-5/EPC</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_5_g_704">
+          <td>CRC-5/G-704</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_5_itu">
+          <td>CRC-5/ITU</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_5_usb">
+          <td>CRC-5/USB</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_6_cdma2000_a">
+          <td>CRC-6/CDMA2000-A</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_6_cdma2000_b">
+          <td>CRC-6/CDMA2000-B</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_6_darc">
+          <td>CRC-6/DARC</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_6_g_704">
+          <td>CRC-6/G-704</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_6_itu">
+          <td>CRC-6/ITU</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_6_gsm">
+          <td>CRC-6/GSM</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_7_mmc">
+          <td>CRC-7/MMC</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_7">
+          <td>CRC-7</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_7_rohc">
+          <td>CRC-7/ROHC</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_7_umts">
+          <td>CRC-7/UMTS</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_autosar">
+          <td>CRC-8/AUTOSAR</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_bluetooth">
+          <td>CRC-8/BLUETOOTH</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_cdma2000">
+          <td>CRC-8/CDMA2000</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_darc">
+          <td>CRC-8/DARC</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_dvb_s2">
+          <td>CRC-8/DVB-S2</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_gsm_a">
+          <td>CRC-8/GSM-A</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_gsm_b">
+          <td>CRC-8/GSM-B</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_hitag">
+          <td>CRC-8/HITAG</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_i_432_1">
+          <td>CRC-8/I-432-1</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_itu">
+          <td>CRC-8/ITU</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_i_code">
+          <td>CRC-8/I-CODE</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_lte">
+          <td>CRC-8/LTE</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_maxim_dow">
+          <td>CRC-8/MAXIM-DOW</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_maxim">
+          <td>CRC-8/MAXIM</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="dow_crc">
+          <td>DOW-CRC</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_mifare_mad">
+          <td>CRC-8/MIFARE-MAD</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_nrsc_5">
+          <td>CRC-8/NRSC-5</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_opensafety">
+          <td>CRC-8/OPENSAFETY</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_rohc">
+          <td>CRC-8/ROHC</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_sae_j1850">
+          <td>CRC-8/SAE-J1850</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_smbus">
+          <td>CRC-8/SMBUS</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8">
+          <td>CRC-8</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_tech_3250">
+          <td>CRC-8/TECH-3250</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_aes">
+          <td>CRC-8/AES</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_ebu">
+          <td>CRC-8/EBU</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_8_wcdma">
+          <td>CRC-8/WCDMA</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_10_atm">
+          <td>CRC-10/ATM</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_10">
+          <td>CRC-10</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_10_i_610">
+          <td>CRC-10/I-610</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_10_cdma2000">
+          <td>CRC-10/CDMA2000</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_10_gsm">
+          <td>CRC-10/GSM</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_11_flexray">
+          <td>CRC-11/FLEXRAY</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_11">
+          <td>CRC-11</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_11_umts">
+          <td>CRC-11/UMTS</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_12_cdma2000">
+          <td>CRC-12/CDMA2000</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_12_dect">
+          <td>CRC-12/DECT</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="x_crc_12">
+          <td>X-CRC-12</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_12_gsm">
+          <td>CRC-12/GSM</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_12_umts">
+          <td>CRC-12/UMTS</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_12_3gpp">
+          <td>CRC-12/3GPP</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_13_bbc">
+          <td>CRC-13/BBC</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_14_darc">
+          <td>CRC-14/DARC</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_14_gsm">
+          <td>CRC-14/GSM</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_15_can">
+          <td>CRC-15/CAN</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_15">
+          <td>CRC-15</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_15_mpt1327">
+          <td>CRC-15/MPT1327</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_arc">
+          <td>CRC-16/ARC</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="arc">
+          <td>ARC</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16">
+          <td>CRC-16</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_lha">
+          <td>CRC-16/LHA</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_ibm">
+          <td>CRC-IBM</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_cdma2000">
+          <td>CRC-16/CDMA2000</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_cms">
+          <td>CRC-16/CMS</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_dds_110">
+          <td>CRC-16/DDS-110</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_dect_r">
+          <td>CRC-16/DECT-R</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="r_crc_16">
+          <td>R-CRC-16</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_dect_x">
+          <td>CRC-16/DECT-X</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="x_crc_16">
+          <td>X-CRC-16</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_dnp">
+          <td>CRC-16/DNP</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_en_13757">
+          <td>CRC-16/EN-13757</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_genibus">
+          <td>CRC-16/GENIBUS</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_darc">
+          <td>CRC-16/DARC</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_epc">
+          <td>CRC-16/EPC</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_epc_c1g2">
+          <td>CRC-16/EPC-C1G2</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_i_code">
+          <td>CRC-16/I-CODE</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_gsm">
+          <td>CRC-16/GSM</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_ibm_3740">
+          <td>CRC-16/IBM-3740</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_autosar">
+          <td>CRC-16/AUTOSAR</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_ccitt_false">
+          <td>CRC-16/CCITT-FALSE</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_ibm_sdlc">
+          <td>CRC-16/IBM-SDLC</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_iso_hdlc">
+          <td>CRC-16/ISO-HDLC</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_iso_iec_14443_3_b">
+          <td>CRC-16/ISO-IEC-14443-3-B</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_x_25">
+          <td>CRC-16/X-25</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_b">
+          <td>CRC-B</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="x_25">
+          <td>X-25</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_iso_iec_14443_3_a">
+          <td>CRC-16/ISO-IEC-14443-3-A</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_a">
+          <td>CRC-A</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_kermit">
+          <td>CRC-16/KERMIT</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_bluetooth">
+          <td>CRC-16/BLUETOOTH</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_ccitt">
+          <td>CRC-16/CCITT</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_ccitt_true">
+          <td>CRC-16/CCITT-TRUE</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_v_41_lsb">
+          <td>CRC-16/V-41-LSB</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_ccitt">
+          <td>CRC-CCITT</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="kermit">
+          <td>KERMIT</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_lj1200">
+          <td>CRC-16/LJ1200</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_m17">
+          <td>CRC-16/M17</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_maxim_dow">
+          <td>CRC-16/MAXIM-DOW</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_maxim">
+          <td>CRC-16/MAXIM</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_mcrf4xx">
+          <td>CRC-16/MCRF4XX</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_modbus">
+          <td>CRC-16/MODBUS</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="modbus">
+          <td>MODBUS</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_nrsc_5">
+          <td>CRC-16/NRSC-5</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_opensafety_a">
+          <td>CRC-16/OPENSAFETY-A</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_opensafety_b">
+          <td>CRC-16/OPENSAFETY-B</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_profibus">
+          <td>CRC-16/PROFIBUS</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_iec_61158_2">
+          <td>CRC-16/IEC-61158-2</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_riello">
+          <td>CRC-16/RIELLO</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_spi_fujitsu">
+          <td>CRC-16/SPI-FUJITSU</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_aug_ccitt">
+          <td>CRC-16/AUG-CCITT</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_t10_dif">
+          <td>CRC-16/T10-DIF</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_teledisk">
+          <td>CRC-16/TELEDISK</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_tms37157">
+          <td>CRC-16/TMS37157</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_umts">
+          <td>CRC-16/UMTS</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_buypass">
+          <td>CRC-16/BUYPASS</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_verifone">
+          <td>CRC-16/VERIFONE</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_usb">
+          <td>CRC-16/USB</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_xmodem">
+          <td>CRC-16/XMODEM</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_acorn">
+          <td>CRC-16/ACORN</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_lte">
+          <td>CRC-16/LTE</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_16_v_41_msb">
+          <td>CRC-16/V-41-MSB</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="xmodem">
+          <td>XMODEM</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="zmodem">
+          <td>ZMODEM</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_17_can_fd">
+          <td>CRC-17/CAN-FD</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_21_can_fd">
+          <td>CRC-21/CAN-FD</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_24_ble">
+          <td>CRC-24/BLE</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_24_flexray_a">
+          <td>CRC-24/FLEXRAY-A</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_24_flexray_b">
+          <td>CRC-24/FLEXRAY-B</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_24_interlaken">
+          <td>CRC-24/INTERLAKEN</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_24_lte_a">
+          <td>CRC-24/LTE-A</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_24_lte_b">
+          <td>CRC-24/LTE-B</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_24_openpgp">
+          <td>CRC-24/OPENPGP</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_24">
+          <td>CRC-24</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_24_os_9">
+          <td>CRC-24/OS-9</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_30_cdma">
+          <td>CRC-30/CDMA</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_31_philips">
+          <td>CRC-31/PHILIPS</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_aixm">
+          <td>CRC-32/AIXM</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32q">
+          <td>CRC-32Q</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_autosar">
+          <td>CRC-32/AUTOSAR</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_base91_d">
+          <td>CRC-32/BASE91-D</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32d">
+          <td>CRC-32D</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_bzip2">
+          <td>CRC-32/BZIP2</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_aal5">
+          <td>CRC-32/AAL5</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_dect_b">
+          <td>CRC-32/DECT-B</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="b_crc_32">
+          <td>B-CRC-32</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_cd_rom_edc">
+          <td>CRC-32/CD-ROM-EDC</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_cksum">
+          <td>CRC-32/CKSUM</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="cksum">
+          <td>CKSUM</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_posix">
+          <td>CRC-32/POSIX</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_iscsi">
+          <td>CRC-32/ISCSI</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_base91_c">
+          <td>CRC-32/BASE91-C</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_castagnoli">
+          <td>CRC-32/CASTAGNOLI</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_interlaken">
+          <td>CRC-32/INTERLAKEN</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32c">
+          <td>CRC-32C</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_nvme">
+          <td>CRC-32/NVME</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_iso_hdlc">
+          <td>CRC-32/ISO-HDLC</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32">
+          <td>CRC-32</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_adccp">
+          <td>CRC-32/ADCCP</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_v_42">
+          <td>CRC-32/V-42</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_xz">
+          <td>CRC-32/XZ</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="pkzip">
+          <td>PKZIP</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_jamcrc">
+          <td>CRC-32/JAMCRC</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="jamcrc">
+          <td>JAMCRC</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_mef">
+          <td>CRC-32/MEF</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_mpeg_2">
+          <td>CRC-32/MPEG-2</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_32_xfer">
+          <td>CRC-32/XFER</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="xfer">
+          <td>XFER</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_40_gsm">
+          <td>CRC-40/GSM</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_64_ecma_182">
+          <td>CRC-64/ECMA-182</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_64">
+          <td>CRC-64</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_64_go_iso">
+          <td>CRC-64/GO-ISO</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_64_ms">
+          <td>CRC-64/MS</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_64_nvme">
+          <td>CRC-64/NVME</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_64_redis">
+          <td>CRC-64/REDIS</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_64_we">
+          <td>CRC-64/WE</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_64_xz">
+          <td>CRC-64/XZ</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_64_go_ecma">
+          <td>CRC-64/GO-ECMA</td>
+          <td><code></code></td>
+        </tr>
+        <tr data-method="crc_82_darc">
+          <td>CRC-82/DARC</td>
+          <td><code></code></td>
+        </tr>
+        <!-- CRC_MODELS_END -->
+      </tbody>
+    </table>
+
+    <script src="./node_modules/js-crc/build/crc.min.js"></script>
+    <script src="./node_modules/js-crc/build/models.min.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

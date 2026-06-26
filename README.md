@@ -5,6 +5,8 @@ Feel free to Star, Fork, or submit Issues to contribute and improve the project!
 
 # Usage
 
+Online CRC calculator: https://crc.wcj.plus/
+
 - maven
 
 ![Maven Central Version](https://img.shields.io/maven-central/v/plus.wcj.crc/crc?style=flat-square)
